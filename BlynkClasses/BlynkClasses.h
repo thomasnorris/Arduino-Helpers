@@ -5,6 +5,8 @@
 #include <ESP8266WiFi.h>
 #include <IPAddress.h>
 
+extern void handleBlynkPinValueChange(int pin, String value);
+
 class BlynkServer {
   public:
     // server

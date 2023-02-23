@@ -3,6 +3,15 @@
 // this must be in this .cpp file instead of the .h file
 #include <BlynkSimpleEsp8266.h>
 
+// custom handling; requires defining function in main
+BLYNK_WRITE_DEFAULT() {
+  int pin = request.pin;
+  String value = param.asStr();
+
+  // somewhere else
+  handleBlynkPinValueChange(pin, value);
+}
+
 // debug flags
 #define BLYNK_PRINT Serial
 #define BLYNK_DEBUG
