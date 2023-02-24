@@ -71,6 +71,9 @@ void LoggerClient::sendLog(String message, String details, int log_type) {
 
     String payload = https.getString();
     Serial.println(payload);
+
+    // free resources
+    https.end();
   }
   else {
     Serial.println("There was an error sending a request to the REST Logger.");

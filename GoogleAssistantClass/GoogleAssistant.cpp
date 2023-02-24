@@ -25,6 +25,7 @@ void GAClient::send(String command) {
     String payload = https.getString();
     Serial.println(payload);
 
+    // free resources
     https.end();
   }
   else {
