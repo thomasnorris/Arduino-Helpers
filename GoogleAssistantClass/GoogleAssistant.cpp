@@ -10,7 +10,7 @@ GAClient::GAClient(String url, String auth_header, String auth_token) {
 
 void GAClient::send(String command) {
   std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
-  
+
   // disable https validation
   client->setInsecure();
 
@@ -28,6 +28,6 @@ void GAClient::send(String command) {
     https.end();
   }
   else {
-    Serial.println("There was an error sending the command.");
+    Serial.println("There was an error sending a request to the Google Assistant.");
   }
 }
