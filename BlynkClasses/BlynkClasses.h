@@ -31,8 +31,14 @@ class VirtualPin {
     void write(String val);
     void write(int val);
     void write(double val);
+    void write(unsigned long val);
+    String read();
+    void set(String val);
+    bool isOn();
+    bool isOff();
   private:
     int Pin;
+    String Value;
 };
 
 class VirtualLed {
@@ -40,8 +46,12 @@ class VirtualLed {
     VirtualLed(int pin);
     void on();
     void off();
+    int read();
+    bool isOn();
+    bool isOff();
   private:
     int Pin;
+    String Value;
 };
 
 #endif

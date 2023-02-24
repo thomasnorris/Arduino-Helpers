@@ -27,9 +27,9 @@ void BlynkServer::configure() {
   ip_address.fromString(this->IP);
 
   Blynk.config(this->AuthToken.c_str(), ip_address, this->Port);
-  this->disconnect();
 
-  Serial.println("Blynk will connect to " + this->IP + " on port " + this->Port);
+  // disconnect right away so connection can be handled manually
+  this->disconnect();
 }
 
 void BlynkServer::run() {
@@ -42,6 +42,11 @@ bool BlynkServer::connected() {
 
 void BlynkServer::connect() {
   Blynk.connect();
+
+  Serial.print("Blynk connected to ");
+  Serial.print(this->IP);
+  Serial.print(" on port ");
+  Serial.println(this->Port);
 }
 
 void BlynkServer::disconnect() {
@@ -58,6 +63,7 @@ void BlynkServer::checkConnection() {
 // VirtualPin
 VirtualPin::VirtualPin(int pin) {
   this->Pin = pin;
+  this->Value = -1;
 }
 
 void VirtualPin::write(String val) {
@@ -72,6 +78,10 @@ void VirtualPin::write(double val) {
   Blynk.virtualWrite(this->Pin, val);
 }
 
+void VirtualPin::write(unsigned long val) {
+  Blynk.virtualWrite(this->Pin, val);
+}
+
 void VirtualPin::on() {
   Blynk.virtualWrite(this->Pin, 1);
 }
@@ -80,9 +90,27 @@ void VirtualPin::off() {
   Blynk.virtualWrite(this->Pin, 0);
 }
 
+// only sets the Value property
+void VirtualPin::set(String val) {
+  this->Value = val;
+}
+
+String VirtualPin::read() {
+  return this->Value;
+}
+
+bool VirtualPin::isOn() {
+  return this->read().toInt() == 1;
+}
+
+bool VirtualPin::isOff() {
+  return this->read().toInt() == 0;
+}
+
 // VirtualLed
 VirtualLed::VirtualLed(int pin) {
   this->Pin = pin;
+  this->Value = -1;
 }
 
 void VirtualLed::on() {
@@ -93,4 +121,17 @@ void VirtualLed::on() {
 void VirtualLed::off() {
   WidgetLED led(this->Pin);
   led.off();
+}
+
+int VirtualLed::read() {
+  WidgetLED led(this->Pin);
+  return led.getValue();
+}
+
+bool VirtualLed::isOn() {
+  return this->read() == 255;
+}
+
+bool VirtualLed::isOff() {
+  return this->read() == 0;
 }
