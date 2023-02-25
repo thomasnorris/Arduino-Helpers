@@ -61,6 +61,9 @@ void BlynkServer::checkConnection() {
 }
 
 // VirtualPin
+// triggers callback BLYNK_WRITE_DEFAULT() {} which should be defined
+// to set the internal Value of each pin to whatever value it was changed to
+// all write(...) functions here also set the internal pin value to avoid race conditions
 VirtualPin::VirtualPin(int pin) {
   this->Pin = pin;
   this->Value = -1;
@@ -68,26 +71,32 @@ VirtualPin::VirtualPin(int pin) {
 
 void VirtualPin::write(String val) {
   Blynk.virtualWrite(this->Pin, val);
+  this->set(val);
 }
 
 void VirtualPin::write(int val) {
   Blynk.virtualWrite(this->Pin, val);
+  this->set(String(val));
 }
 
 void VirtualPin::write(double val) {
   Blynk.virtualWrite(this->Pin, val);
+  this->set(String(val));
 }
 
 void VirtualPin::write(unsigned long val) {
   Blynk.virtualWrite(this->Pin, val);
+  this->set(String(val));
 }
 
 void VirtualPin::on() {
   Blynk.virtualWrite(this->Pin, 1);
+  this->set(String(0));
 }
 
 void VirtualPin::off() {
   Blynk.virtualWrite(this->Pin, 0);
+  this->set(String(0));
 }
 
 // only sets the Value property
@@ -110,7 +119,6 @@ bool VirtualPin::isOff() {
 // VirtualLed
 VirtualLed::VirtualLed(int pin) {
   this->Pin = pin;
-  this->Value = -1;
 }
 
 void VirtualLed::on() {

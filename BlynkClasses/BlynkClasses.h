@@ -51,7 +51,6 @@ class VirtualLed {
     bool isOff();
   private:
     int Pin;
-    String Value;
 };
 
 #endif
