@@ -4,9 +4,9 @@
 #include <Arduino.h>
 #include <ArduinoOTA.h>
 
-class ArdOTA {
+class OTAClient {
   public:
-    ArdOTA(String hostname = "", String password = "", int port = 8266);
+    OTAClient(String hostname = "", String password = "", int port = 8266);
     void begin();
     void handle();
   private:

@@ -4,11 +4,11 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "wl_definitions.h"
-#include "../LedClass/Led.h"
+#include "../LedClass/LedClass.h"
 
-class Wifi {
+class WifiClient {
   public:
-    Wifi(String ssid, String password, byte led_pin, byte led_pin_on_value);
+    WifiClient(String ssid, String password, byte led_pin, byte led_pin_on_value);
     void connect();
     void disconnect();
     void checkConnection();

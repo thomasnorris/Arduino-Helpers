@@ -1,4 +1,4 @@
-#include "Gpio.h"
+#include "GpioClass.h"
 
 Gpio::Gpio(byte pin, byte pin_mode) {
   this->Pin = pin;

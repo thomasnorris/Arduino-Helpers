@@ -1,6 +1,6 @@
-#include "ArduinoOTA.h"
+#include "OTAClass.h"
 
-ArdOTA::ArdOTA(String hostname, String password, int port) {
+OTAClient::OTAClient(String hostname, String password, int port) {
   this->Hostname = hostname;
   this->Password = password;
   this->Port = port;
@@ -8,7 +8,7 @@ ArdOTA::ArdOTA(String hostname, String password, int port) {
   this->init();
 }
 
-void ArdOTA::init() {
+void OTAClient::init() {
   ArduinoOTA.setPort(this->Port);
 
   if (this->Hostname != String("")) {
@@ -39,10 +39,10 @@ void ArdOTA::init() {
   });
 }
 
-void ArdOTA::begin() {
+void OTAClient::begin() {
   ArduinoOTA.begin();
 }
 
-void ArdOTA::handle() {
+void OTAClient::handle() {
   ArduinoOTA.handle();
 }

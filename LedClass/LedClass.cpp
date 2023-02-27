@@ -1,4 +1,4 @@
-#include "Led.h"
+#include "LedClass.h"
 
 Led::Led(byte pin, byte on_value) {
   this->Pin = pin;

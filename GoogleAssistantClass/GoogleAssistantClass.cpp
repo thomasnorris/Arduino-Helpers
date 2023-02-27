@@ -1,4 +1,4 @@
-#include "GoogleAssistant.h"
+#include "GoogleAssistantClass.h"
 
 // reference: https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266HTTPClient/examples/BasicHttpsClient/BasicHttpsClient.ino
 
