@@ -1,10 +1,10 @@
 #include "TimeHelpersClass.h"
 
-char _days_of_the_week[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-WiFiUDP _ntpUDP;
+const char DAYS_OF_THE_WEEK[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 // set NTPClient to EST time zone (UTC -5 Hours)
 long _utc_time_seconds = -5 * 3600;
+WiFiUDP _ntpUDP;
 NTPClient _timeClient(_ntpUDP, "north-america.pool.ntp.org", _utc_time_seconds);
 
 // public
@@ -23,7 +23,7 @@ void TimeHelpers::update() {
 String TimeHelpers::getCurrentLocalDateTime() {
   // update for good measure
   this->update();
-  String day = String(_days_of_the_week[_timeClient.getDay()]);
+  String day = String(DAYS_OF_THE_WEEK[_timeClient.getDay()]);
 
   return day + " " + _timeClient.getFormattedTime();
 }

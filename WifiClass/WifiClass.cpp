@@ -1,7 +1,7 @@
 #include "WifiClass.h"
 
-#define CONNECT_WAIT_DELAY_MS 250
-#define MONITOR_DELAY_MS 1000
+const int CONNECT_WAIT_DELAY_MS = 250;
+const int MONITOR_DELAY_MS = 1000;
 
 WifiClient::WifiClient(String ssid, String password, byte led_pin, byte led_pin_on_value) {
   this->SSID = ssid;
@@ -15,7 +15,7 @@ void WifiClient::connect() {
 
   delay(CONNECT_WAIT_DELAY_MS);
 
-  Serial.print("Connecting to WifiClient network ");
+  Serial.print("Connecting to Wifi network ");
   Serial.print(this->SSID);
 
   while (WiFi.status() != WL_CONNECTED) {
