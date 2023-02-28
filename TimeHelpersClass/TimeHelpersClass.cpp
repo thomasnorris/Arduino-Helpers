@@ -1,10 +1,34 @@
 #include "TimeHelpersClass.h"
 
+char _days_of_the_week[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+WiFiUDP _ntpUDP;
+
+// set NTPClient to EST time zone (UTC -5 Hours)
+long _utc_time_seconds = -5 * 3600;
+NTPClient _timeClient(_ntpUDP, "north-america.pool.ntp.org", _utc_time_seconds);
+
+// public
 TimeHelpers::TimeHelpers() {
   // nothing
 }
 
-std::chrono::time_point<std::chrono::system_clock> TimeHelpers::getTimeNow() {
+void TimeHelpers::begin() {
+  _timeClient.begin();
+}
+
+void TimeHelpers::update() {
+  _timeClient.update();
+}
+
+String TimeHelpers::getCurrentLocalDateTime() {
+  // update for good measure
+  this->update();
+  String day = String(_days_of_the_week[_timeClient.getDay()]);
+
+  return day + " " + _timeClient.getFormattedTime();
+}
+
+std::chrono::time_point<std::chrono::system_clock> TimeHelpers::getClockTimeNow() {
   return std::chrono::system_clock::now();
 }
 
@@ -13,7 +37,7 @@ double TimeHelpers::getElapsedTimeS(std::chrono::time_point<std::chrono::system_
   return elapsed_seconds.count();
 }
 
-String TimeHelpers::formatSeconds(int seconds) {
+String TimeHelpers::prettyFormatS(int seconds) {
   int minutes = seconds / 60;
   int hours = minutes / 60;
   int days = hours / 24;
