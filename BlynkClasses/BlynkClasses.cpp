@@ -1,5 +1,12 @@
 #include "BlynkClasses.h"
 
+// requires installing Blynk Library V1.0.0 via arduino studio (not the newest!)
+// see all releases here: https://github.com/blynkkk/blynk-library/releases
+
+// requires setting up a Blynk Legacy server and connecting to it
+// see legacy server setup here: https://github.com/Peterkn2001/blynk-server/releases
+// server-0.41.17.jar used and works
+
 // this must be in this .cpp file instead of the .h file
 #include <BlynkSimpleEsp8266.h>
 
@@ -13,8 +20,8 @@ BLYNK_WRITE_DEFAULT() {
 }
 
 // debug flags
-#define BLYNK_PRINT Serial
-#define BLYNK_DEBUG
+// #define BLYNK_PRINT Serial
+// #define BLYNK_DEBUG
 
 BlynkServer::BlynkServer(String ip_address, int port, String auth_token) {
   this->IP = ip_address;
@@ -60,6 +67,10 @@ void BlynkServer::checkConnection() {
   }
 }
 
+void BlynkServer::notify(String message) {
+  Blynk.notify(message);
+}
+
 // VirtualPin
 // triggers callback BLYNK_WRITE_DEFAULT() {} which should be defined
 // to set the internal Value of each pin to whatever value it was changed to
@@ -91,15 +102,16 @@ void VirtualPin::write(unsigned long val) {
 
 void VirtualPin::on() {
   Blynk.virtualWrite(this->Pin, 1);
-  this->set(String(0));
+  this->set("1");
 }
 
 void VirtualPin::off() {
   Blynk.virtualWrite(this->Pin, 0);
-  this->set(String(0));
+  this->set("0");
 }
 
 // only sets the Value property
+// set when pin is written to via Blynk callback or from code
 void VirtualPin::set(String val) {
   this->Value = val;
 }

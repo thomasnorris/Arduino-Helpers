@@ -17,6 +17,7 @@ class BlynkServer {
     void disconnect();
     void run();
     void checkConnection();
+    void notify(String message);
   private:
     String IP;
     String AuthToken;
