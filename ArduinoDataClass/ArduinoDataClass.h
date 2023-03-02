@@ -7,11 +7,14 @@
 class ArduinoData {
   public:
     ArduinoData(int app_ID, String url, String username, String password, int port = 3306);
-    void testConnect();
+    // insert
     void insertDataPoint(int data_point_type_ID, String value);
     void insertDataPoint(int data_point_type_ID, int value);
+    // update
+    void updateDataPoint(int data_point_type_ID, String value);
+    void updateDataPoint(int data_point_type_ID, int value);
   private:
-    void insertDataPointInternal(int data_point_type_ID, String value);
+    void upsertInternal(String proc, int data_point_type_ID, String value);
     int AppID;
 };
 

@@ -11,17 +11,6 @@ MySQLConn::MySQLConn(String url, String username, String password, int port) {
   this->Port = port;
 }
 
-void MySQLConn::testConnect() {
-  String result = "established";
-  if (!this->connect()) {
-    result = "failed";
-  }
-
-  Serial.println("Connection to MySQL Server " + result);
-
-  this->close();
-}
-
 String MySQLConn::getSingleValue(String query) {
   this->connect();
 

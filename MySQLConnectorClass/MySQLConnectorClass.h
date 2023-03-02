@@ -10,7 +10,6 @@
 class MySQLConn {
     public:
         MySQLConn(String url, String username, String password, int port = 3306);
-        void testConnect();
         String getSingleValue(String query);
         void upsert(String query);
     private:
