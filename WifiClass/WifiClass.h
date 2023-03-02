@@ -13,6 +13,7 @@ class WifiClient {
     void disconnect();
     void checkConnection();
     void printNetworkInfo();
+    String getIPAddress();
   private:
     String SSID;
     String Password;

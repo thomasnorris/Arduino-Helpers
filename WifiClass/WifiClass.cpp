@@ -45,5 +45,9 @@ void WifiClient::printNetworkInfo() {
   Serial.print("SSID: ");
   Serial.println(this->SSID);
   Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP().toString());
+  Serial.println(this->getIPAddress());
+}
+
+String WifiClient::getIPAddress() {
+  return WiFi.localIP().toString();
 }
