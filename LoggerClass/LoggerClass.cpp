@@ -9,12 +9,17 @@
 #define CRITICAL 5
 #define INIT 6
 
+BearSSL::WiFiClientSecure* _client = new BearSSL::WiFiClientSecure();
+HTTPClient _https;
+
 // public
 LoggerClient::LoggerClient(String url, String auth_header, String auth_token, int app_ID) {
   this->URL = url;
   this->AuthHeader = auth_header;
   this->AuthToken = auth_token;
   this->AppID = app_ID;
+
+  _client->setInsecure();
 }
 
 void LoggerClient::debug(String message, String details) {
@@ -43,15 +48,9 @@ void LoggerClient::init(String message, String details) {
 
 // private
 void LoggerClient::sendLog(String message, String details, int log_type) {
-  std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
-
-  // disable https validation
-  client->setInsecure();
-
-  HTTPClient https;
-  if (https.begin(*client, this->URL)) {
-    https.addHeader(this->AuthHeader, this->AuthToken);
-    https.addHeader("Content-Type", "application/json");
+  if (_https.begin(*_client, this->URL)) {
+    _https.addHeader(this->AuthHeader, this->AuthToken);
+    _https.addHeader("Content-Type", "application/json");
 
     // body formatting reference: https://github.com/thomasnorris/REST-Logger/blob/master/config/config_template.json
     // json formating reference: https://randomnerdtutorials.com/esp32-http-get-post-arduino/
@@ -66,14 +65,14 @@ void LoggerClient::sendLog(String message, String details, int log_type) {
 
     json += "}";
 
-    int httpCode = https.POST(json);
+    int httpCode = _https.POST(json);
     Serial.println(httpCode);
 
-    String payload = https.getString();
+    String payload = _https.getString();
     Serial.println(payload);
 
     // free resources
-    https.end();
+    _https.end();
   }
   else {
     Serial.println("There was an error sending a request to the REST Logger.");
