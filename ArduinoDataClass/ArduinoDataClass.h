@@ -4,9 +4,9 @@
 #include <Arduino.h>
 #include "../MySQLConnectorClass/MySQLConnectorClass.h"
 
-class ArduinoData {
+class ArduinoDataClient {
   public:
-    ArduinoData(int app_ID, String url, String username, String password, int port = 3306);
+    ArduinoDataClient(int app_ID, String url, String username, String password, int port = 3306);
     // insert
     void insertDataPoint(int data_point_type_ID, String value);
     void insertDataPoint(int data_point_type_ID, int value);
