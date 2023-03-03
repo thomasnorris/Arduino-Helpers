@@ -2,12 +2,11 @@
 #define LOGGER_CLASS_H_
 
 #include <Arduino.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClientSecureBearSSL.h>
+#include "../MySQLConnectorClass/MySQLConnectorClass.h"
 
 class LoggerClient {
   public:
-    LoggerClient(String url, String auth_header, String auth_token, int app_ID);
+    LoggerClient(int app_ID, String url, String username, String password, int port = 3306);
     void debug(String message, String details = "");
     void info(String message, String details = "");
     void warning(String message, String details = "");
@@ -15,12 +14,8 @@ class LoggerClient {
     void critical(String message, String details = "");
     void init(String message, String details = "");
   private:
-    String URL;
-    String AuthHeader;
-    String AuthToken;
+    void sendLog(String message, String details, int log_type_ID);
     int AppID;
-    void sendLog(String message, String details, int log_type);
-    String buildJsonKVP(String key, String val);
 };
 
 #endif

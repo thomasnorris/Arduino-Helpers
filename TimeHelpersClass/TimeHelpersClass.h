@@ -7,6 +7,8 @@
 
 #include <Arduino.h>
 #include <chrono>
+#include <string>
+#include <sstream>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
@@ -18,8 +20,10 @@ class TimeHelpers {
         String prettyFormatS(int seconds);
         void begin();
         void update();
-        String getCurrentLocalDateTime();
+        String getCurrentLocalDateTime24hr();
+        String getCurrentLocalDateTime12hr();
     private:
+        String getFormattedTime();
 };
 
 #endif

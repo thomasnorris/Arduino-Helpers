@@ -1,11 +1,13 @@
 #include "ArduinoDataClass.h"
 
-const String INSERT_SP = "ArduinoData.SP_InsertDataPoint";
-const String UPDATE_SP = "ArduinoData.SP_UpdateDataPoint";
-const String GET_SUM_TODAY_SP = "ArduinoData.SP_SumValueOfDataPointsToday";
-const String GET_LAST_DTP_SP = "ArduinoData.SP_GetLastDataPoint";
+namespace {
+  const String INSERT_SP = "ArduinoData.SP_InsertDataPoint";
+  const String UPDATE_SP = "ArduinoData.SP_UpdateDataPoint";
+  const String GET_SUM_TODAY_SP = "ArduinoData.SP_SumValueOfDataPointsToday";
+  const String GET_LAST_DTP_SP = "ArduinoData.SP_GetLastDataPoint";
 
-MySQLConn* _sql;
+  MySQLConn* _sql;
+}
 
 // public
 ArduinoData::ArduinoData(int app_ID, String url, String username, String password, int port) {
