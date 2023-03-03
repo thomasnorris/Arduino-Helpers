@@ -1,8 +1,5 @@
 #include "BlynkClasses.h"
 
-// requires installing Blynk Library V1.0.0 via arduino studio (not the newest!)
-// see all releases here: https://github.com/blynkkk/blynk-library/releases
-
 // requires setting up a Blynk Legacy server and connecting to it
 // see legacy server setup here: https://github.com/Peterkn2001/blynk-server/releases
 // server-0.41.17.jar used and works

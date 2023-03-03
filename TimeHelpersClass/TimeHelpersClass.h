@@ -1,6 +1,10 @@
 #ifndef TIME_HELPERS_H_
 #define TIME_HELPERS_H_
 
+/* Library Requirements */
+// https://github.com/arduino-libraries/NTPClient
+// ESP8266WiFi
+
 #include <Arduino.h>
 #include <chrono>
 #include <NTPClient.h>

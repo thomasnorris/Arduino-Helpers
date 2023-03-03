@@ -1,8 +1,11 @@
 #ifndef BLYNK_H_
 #define BLYNK_H_
 
+/* Library Requirements */
+// Blynk v1.0.0 (THIS VERSION!) See all releases here: https://github.com/blynkkk/blynk-library/releases
+// ESP8266WiFi
+
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
 #include <IPAddress.h>
 
 extern void handleBlynkPinValueChange(int pin, String value);

@@ -1,6 +1,10 @@
 #ifndef WIFI_H_
 #define WIFI_H_
 
+/* Library Requirements */
+// https://github.com/arduino-libraries/NTPClient
+// ESP8266WiFi
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "wl_definitions.h"
