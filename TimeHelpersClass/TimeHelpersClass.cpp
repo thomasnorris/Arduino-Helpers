@@ -44,7 +44,12 @@ String TimeHelpers::getCurrentLocalDateTime12hr() {
   ss << time_24hr_cstr.substr(0, time_24hr_cstr.find(delimiter));
   ss >> hr;
 
-  // convert into am/pm if after 12pm
+  // convert into am/pm
+  if (hr == 0) {
+    hr = 12;
+    am_pm = "AM";
+  }
+
   if (hr >= 13) {
     hr -= 12;
     am_pm = "PM";
@@ -56,6 +61,7 @@ String TimeHelpers::getCurrentLocalDateTime12hr() {
     str_hr = "0" + str_hr;
   }
 
+  // string back together and return with the day of the week
   std::string remaining_time_12hr = time_24hr_cstr.erase(0, time_24hr_cstr.find(delimiter) + delimiter.length());
 
   return day + " " + str_hr + ":" + String(remaining_time_12hr.c_str()) + " " + am_pm;

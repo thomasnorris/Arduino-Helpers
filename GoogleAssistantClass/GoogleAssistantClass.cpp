@@ -1,6 +1,6 @@
 #include "GoogleAssistantClass.h"
 
-// reference: https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266HTTPClient/examples/BasicHttpsClient/BasicHttpsClient.ino
+// reference: https://randomnerdtutorials.com/esp8266-nodemcu-http-get-post-arduino/
 
 GAClient::GAClient(String url, String auth_header, String auth_token) {
   this->URL = url;
@@ -9,24 +9,21 @@ GAClient::GAClient(String url, String auth_header, String auth_token) {
 }
 
 void GAClient::send(String command) {
-  std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
+  WiFiClient client;
+  HTTPClient http;
 
-  // disable https validation
-  client->setInsecure();
+  String full_url = this->URL + "/" + command;
+  if (http.begin(client, full_url.c_str())) {
+    http.addHeader(this->AuthHeader, this->AuthToken);
 
-  HTTPClient https;
-  String fullUrl = this->URL + "/" + command;
-  if (https.begin(*client, fullUrl)) {
-    https.addHeader(this->AuthHeader, this->AuthToken);
-
-    int httpCode = https.GET();
+    int httpCode = http.GET();
     Serial.println(httpCode);
 
-    String payload = https.getString();
+    String payload = http.getString();
     Serial.println(payload);
 
     // free resources
-    https.end();
+    http.end();
   }
   else {
     Serial.println("There was an error sending a request to the Google Assistant.");

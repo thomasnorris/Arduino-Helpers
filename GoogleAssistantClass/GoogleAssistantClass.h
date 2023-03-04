@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
-#include <WiFiClientSecureBearSSL.h>
+#include <WiFiClient.h>
 
 class GAClient {
   public:
