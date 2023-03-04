@@ -13,8 +13,11 @@ void GAClient::send(String command) {
   HTTPClient http;
 
   String full_url = this->URL + "/" + command;
-  if (http.begin(client, full_url.c_str())) {
+  full_url.replace(" ", "%20");
+  if (http.begin(client, full_url)) {
     http.addHeader(this->AuthHeader, this->AuthToken);
+
+    Serial.println("Sending " + full_url);
 
     int httpCode = http.GET();
     Serial.println(httpCode);
