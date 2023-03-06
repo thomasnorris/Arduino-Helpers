@@ -1,7 +1,9 @@
 #include "MySQLConnectorClass.h"
 
-WiFiClient _wifiClient;
-MySQL_Connection _conn((Client *)&_wifiClient);
+namespace {
+  WiFiClient _wifiClient;
+  MySQL_Connection _conn((Client *)&_wifiClient);
+}
 
 // public
 MySQLConn::MySQLConn(String url, String username, String password, int port) {

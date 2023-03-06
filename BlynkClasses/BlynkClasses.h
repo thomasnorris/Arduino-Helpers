@@ -7,12 +7,12 @@
 
 #include <Arduino.h>
 #include <IPAddress.h>
+#include "../TimeHelpersClass/TimeHelpersClass.h"
 
 extern void handleBlynkPinValueChange(int pin, String value);
 
 class BlynkServer {
   public:
-    // server
     BlynkServer(String ip_address, int port, String auth_token);
     void configure();
     void connect();
@@ -55,6 +55,26 @@ class VirtualLed {
     bool isOff();
   private:
     int Pin;
+};
+
+class VirtualTerminal {
+  public:
+    VirtualTerminal(int pin);
+    VirtualTerminal(int pin, TimeHelpers* th);
+    void debug(String string);
+    void info(String string);
+    void warning(String string);
+    void error(String string);
+    void critical(String string);
+    void init(String string);
+    void print(String message, String prefix = "");
+    void println(String message, String prefix = "");
+    void clear();
+  private:
+    int Pin;
+    String Value;
+    TimeHelpers* MyTimeHelpers = nullptr;
+    String buildMessage(String message, String prefix = "");
 };
 
 #endif

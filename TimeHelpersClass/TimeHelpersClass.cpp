@@ -1,11 +1,13 @@
 #include "TimeHelpersClass.h"
 
-const char DAYS_OF_THE_WEEK[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+namespace {
+  const char DAYS_OF_THE_WEEK[7][12] = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
-// set NTPClient to EST time zone (UTC -5 Hours)
-long _utc_time_seconds = -5 * 3600;
-WiFiUDP _ntpUDP;
-NTPClient _timeClient(_ntpUDP, "north-america.pool.ntp.org", _utc_time_seconds);
+  // set NTPClient to EST time zone (UTC -5 Hours)
+  long _utc_time_seconds = -5 * 3600;
+  WiFiUDP _ntpUDP;
+  NTPClient _timeClient(_ntpUDP, "north-america.pool.ntp.org", _utc_time_seconds);
+}
 
 // public
 TimeHelpers::TimeHelpers() {
@@ -21,50 +23,19 @@ void TimeHelpers::update() {
 }
 
 String TimeHelpers::getCurrentLocalDateTime24hr() {
-  // update for good measure
   this->update();
-  String day = String(DAYS_OF_THE_WEEK[_timeClient.getDay()]);
+  String day_of_the_week = String(DAYS_OF_THE_WEEK[_timeClient.getDay()]);
+  String time = this->getCurrentLocalTime24hr();
 
-  return day + " " + this->getFormattedTime();
+  return day_of_the_week + " " + time;
 }
 
 String TimeHelpers::getCurrentLocalDateTime12hr() {
-  // update for good measure
   this->update();
-  String day = String(DAYS_OF_THE_WEEK[_timeClient.getDay()]);
-  String time_24hr = this->getFormattedTime();
+  String day_of_the_week = String(DAYS_OF_THE_WEEK[_timeClient.getDay()]);
+  String time = this->getCurrentLocalTime12hr();
 
-  String am_pm = "AM";
-  std::string time_24hr_cstr = time_24hr.c_str();
-  std::string delimiter = String(":").c_str();
-
-  // get the first chunk of the time
-  std::stringstream ss;
-  int hr;
-  ss << time_24hr_cstr.substr(0, time_24hr_cstr.find(delimiter));
-  ss >> hr;
-
-  // convert into am/pm
-  if (hr == 0) {
-    hr = 12;
-    am_pm = "AM";
-  }
-
-  if (hr >= 13) {
-    hr -= 12;
-    am_pm = "PM";
-  }
-
-  // pad the hour if needed
-  String str_hr = String(hr);
-  if (str_hr.length() == 1) {
-    str_hr = "0" + str_hr;
-  }
-
-  // string back together and return with the day of the week
-  std::string remaining_time_12hr = time_24hr_cstr.erase(0, time_24hr_cstr.find(delimiter) + delimiter.length());
-
-  return day + " " + str_hr + ":" + String(remaining_time_12hr.c_str()) + " " + am_pm;
+  return day_of_the_week + " " + time;
 }
 
 std::chrono::time_point<std::chrono::system_clock> TimeHelpers::getClockTimeNow() {
@@ -108,7 +79,50 @@ String TimeHelpers::prettyFormatS(int seconds) {
   return String(rem_minutes) + "m " + String(rem_seconds) + "s";
 }
 
+String TimeHelpers::getCurrentLocalTime24hr() {
+  this->update();
+  return this->getFormattedTime();
+}
+
+String TimeHelpers::getCurrentLocalTime12hr() {
+  this->update();
+  String time_24hr = this->getFormattedTime();
+
+  String am_pm = "AM";
+  std::string time_24hr_cstr = time_24hr.c_str();
+  std::string delimiter = String(":").c_str();
+
+  // get the first chunk of the time
+  std::stringstream ss;
+  int hr;
+  ss << time_24hr_cstr.substr(0, time_24hr_cstr.find(delimiter));
+  ss >> hr;
+
+  // convert into am/pm
+  if (hr == 0) {
+    hr = 12;
+    am_pm = "AM";
+  }
+
+  if (hr >= 13) {
+    hr -= 12;
+    am_pm = "PM";
+  }
+
+  // pad the hour if needed
+  String str_hr = String(hr);
+  if (str_hr.length() == 1) {
+    str_hr = "0" + str_hr;
+  }
+
+  // string back together and return
+  std::string remaining_time_12hr = time_24hr_cstr.erase(0, time_24hr_cstr.find(delimiter) + delimiter.length());
+
+  return String(str_hr.c_str()) + ":" + String(remaining_time_12hr.c_str()) + am_pm;
+}
+
 // private
 String TimeHelpers::getFormattedTime() {
+  this->update();
   return _timeClient.getFormattedTime();
 }

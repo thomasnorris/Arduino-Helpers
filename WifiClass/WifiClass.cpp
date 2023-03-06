@@ -1,7 +1,8 @@
 #include "WifiClass.h"
 
-const int CONNECT_WAIT_DELAY_MS = 250;
-const int MONITOR_DELAY_MS = 1000;
+namespace {
+  const int CONNECT_WAIT_DELAY_MS = 250;
+}
 
 WifiClient::WifiClient(String ssid, String password, byte led_pin, byte led_pin_on_value) {
   this->SSID = ssid;

@@ -152,3 +152,85 @@ bool VirtualLed::isOn() {
 bool VirtualLed::isOff() {
   return this->read() == 0;
 }
+
+// VirtualTerminal
+// avoids having the same thing printed over and over by keeping track of the
+// last printed message and only printing it if it has changed
+VirtualTerminal::VirtualTerminal(int pin) {
+  this->Pin = pin;
+  this->Value = "";
+  this->MyTimeHelpers = nullptr;
+}
+
+VirtualTerminal::VirtualTerminal(int pin, TimeHelpers* th) {
+  this->Pin = pin;
+  this->Value = "";
+  this->MyTimeHelpers = th;
+}
+
+void VirtualTerminal::debug(String string) {
+  this->println(string, "[DEBUG]");
+}
+
+void VirtualTerminal::info(String string) {
+  this->println(string, "[INFO]");
+}
+
+void VirtualTerminal::warning(String string) {
+  this->println(string, "[WARN]");
+}
+
+void VirtualTerminal::error(String string) {
+  this->println(string, "[ERR]");
+}
+
+void VirtualTerminal::critical(String string) {
+  this->println(string, "[CRIT]");
+}
+
+void VirtualTerminal::init(String string) {
+  this->println(string, "[INIT]");
+}
+
+void VirtualTerminal::print(String message, String prefix) {
+  if (this->Value != message) {
+    this->Value = message;
+
+    message = this->buildMessage(message, prefix);
+
+    WidgetTerminal term(this->Pin);
+    term.print(message);
+    term.flush();
+  }
+}
+
+void VirtualTerminal::println(String message, String prefix) {
+  if (this->Value != message) {
+    this->Value = message;
+
+    message = this->buildMessage(message, prefix);
+
+    WidgetTerminal term(this->Pin);
+    term.println(message);
+    term.flush();
+  }
+}
+
+void VirtualTerminal::clear() {
+  WidgetTerminal term(this->Pin);
+  term.clear();
+}
+
+// private
+String VirtualTerminal::buildMessage(String message, String prefix) {
+  String time = "";
+  if (this->MyTimeHelpers != nullptr) {
+    time = this->MyTimeHelpers->getCurrentLocalTime12hr() + ": ";
+  }
+
+  if (prefix != "") {
+    return time + prefix + " " + message;
+  }
+
+  return time + message;
+}

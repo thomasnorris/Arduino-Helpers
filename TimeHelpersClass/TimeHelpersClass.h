@@ -22,6 +22,8 @@ class TimeHelpers {
         void update();
         String getCurrentLocalDateTime24hr();
         String getCurrentLocalDateTime12hr();
+        String getCurrentLocalTime24hr();
+        String getCurrentLocalTime12hr();
     private:
         String getFormattedTime();
 };
