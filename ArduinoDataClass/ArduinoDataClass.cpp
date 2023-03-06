@@ -4,6 +4,7 @@ namespace {
   const String INSERT_SP = "ArduinoData.SP_InsertDataPoint";
   const String UPDATE_SP = "ArduinoData.SP_UpdateDataPoint";
   const String GET_SUM_TODAY_SP = "ArduinoData.SP_SumValueOfDataPointsToday";
+  const String GET_SUM_THIS_WEEK_SP = "ArduinoData.SP_SumValueOfDataPointsThisWeek";
   const String GET_LAST_DTP_SP = "ArduinoData.SP_GetLastDataPoint";
 
   MySQLConn* _sql;
@@ -33,6 +34,10 @@ void ArduinoDataClient::updateDataPoint(int data_point_type_ID, int value) {
 
 String ArduinoDataClient::getSumToday(int data_point_type_ID) {
   return this->getSumInternal(GET_SUM_TODAY_SP, data_point_type_ID);
+}
+
+String ArduinoDataClient::getSumThisWeek(int data_point_type_ID) {
+  return this->getSumInternal(GET_SUM_THIS_WEEK_SP, data_point_type_ID);
 }
 
 String ArduinoDataClient::getLast(int data_point_type_ID) {

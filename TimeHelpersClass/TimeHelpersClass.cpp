@@ -118,7 +118,7 @@ String TimeHelpers::getCurrentLocalTime12hr() {
   // string back together and return
   std::string remaining_time_12hr = time_24hr_cstr.erase(0, time_24hr_cstr.find(delimiter) + delimiter.length());
 
-  return String(str_hr.c_str()) + ":" + String(remaining_time_12hr.c_str()) + am_pm;
+  return String(str_hr.c_str()) + ":" + String(remaining_time_12hr.c_str()) + " " + am_pm;
 }
 
 // private

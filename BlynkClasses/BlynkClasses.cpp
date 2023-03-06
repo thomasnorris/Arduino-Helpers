@@ -253,7 +253,11 @@ void VirtualTerminal::println(String message, String prefix) {
   }
 }
 
+// reset the internal Value to empty so the next message can print no matter
+// if it was printed last or not
 void VirtualTerminal::clear() {
+  this->Value = "";
+
   WidgetTerminal term(this->Pin);
   term.clear();
 }
