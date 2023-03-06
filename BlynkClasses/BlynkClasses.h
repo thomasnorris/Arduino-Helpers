@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <IPAddress.h>
 #include "../TimeHelpersClass/TimeHelpersClass.h"
+#include "../ExceptionHandlerClass/ExceptionHandlerClass.h"
 
 extern void handleBlynkPinValueChange(int pin, String value);
 

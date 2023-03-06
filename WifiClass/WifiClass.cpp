@@ -2,37 +2,51 @@
 
 namespace {
   const int CONNECT_WAIT_DELAY_MS = 250;
+
+  ExceptionHandler* _eh = new ExceptionHandler();
+  Led* LED = nullptr;
 }
 
 WifiClient::WifiClient(String ssid, String password, byte led_pin, byte led_pin_on_value) {
   this->SSID = ssid;
   this->Password = password;
-  this->LED = new Led(led_pin, led_pin_on_value);
+
+  LED = new Led(led_pin, led_pin_on_value);
 }
 
 void WifiClient::connect() {
-  this->LED->off();
-  WiFi.begin(this->SSID, this->Password);
+  try {
+    LED->off();
+    WiFi.begin(this->SSID, this->Password);
 
-  delay(CONNECT_WAIT_DELAY_MS);
+    delay(CONNECT_WAIT_DELAY_MS);
 
-  Serial.print("Connecting to Wifi network ");
-  Serial.print(this->SSID);
+    Serial.print("Connecting to Wifi network ");
+    Serial.print(this->SSID);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    this->LED->toggleOnOff(CONNECT_WAIT_DELAY_MS);
-    Serial.print(".");
+    while (WiFi.status() != WL_CONNECTED) {
+      LED->toggleOnOff(CONNECT_WAIT_DELAY_MS);
+      Serial.print(".");
+    }
+
+    Serial.println("Connected!");
+
+    this->printNetworkInfo();
+    LED->on();
   }
-
-  Serial.println("Connected!");
-
-  this->printNetworkInfo();
-  this->LED->on();
+  catch (...) {
+    _eh->handle("void WifiClient::connect()");
+  }
 }
 
 void WifiClient::disconnect() {
-  this->LED->off();
-  WiFi.disconnect();
+  try {
+    LED->off();
+    WiFi.disconnect();
+  }
+  catch (...) {
+    _eh->handle("void WifiClient::disconnect()");
+  }
 }
 
 void WifiClient::checkConnection() {

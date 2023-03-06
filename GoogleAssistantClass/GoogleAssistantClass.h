@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
+#include "../ExceptionHandlerClass/ExceptionHandlerClass.h"
 
 class GAClient {
   public:

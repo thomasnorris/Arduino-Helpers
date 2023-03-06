@@ -7,13 +7,22 @@
 // this must be in this .cpp file instead of the .h file
 #include <BlynkSimpleEsp8266.h>
 
+namespace {
+  ExceptionHandler* _eh = new ExceptionHandler();
+}
+
 // custom handling; requires defining function in main
 BLYNK_WRITE_DEFAULT() {
-  int pin = request.pin;
-  String value = param.asStr();
+  try {
+    int pin = request.pin;
+    String value = param.asStr();
 
-  // somewhere else
-  handleBlynkPinValueChange(pin, value);
+    // somewhere else
+    handleBlynkPinValueChange(pin, value);
+  }
+  catch (...) {
+    _eh->handle("BlynkClasses.cpp/BLYNK_WRITE_DEFAULT()");
+  }
 }
 
 // debug flags
@@ -27,34 +36,62 @@ BlynkServer::BlynkServer(String ip_address, int port, String auth_token) {
 }
 
 void BlynkServer::configure() {
-  IPAddress ip_address;
-  ip_address.fromString(this->IP);
+  try {
+    IPAddress ip_address;
+    ip_address.fromString(this->IP);
 
-  Blynk.config(this->AuthToken.c_str(), ip_address, this->Port);
+    Blynk.config(this->AuthToken.c_str(), ip_address, this->Port);
 
-  // disconnect right away so connection can be handled manually
-  this->disconnect();
+    // disconnect right away so connection can be handled manually
+    this->disconnect();
+  }
+  catch (...) {
+    _eh->handle("void BlynkServer::configure()");
+  }
 }
 
 void BlynkServer::run() {
-  Blynk.run();
+  try {
+    Blynk.run();
+  }
+  catch (...) {
+    _eh->handle("void BlynkServer::run()");
+  }
 }
 
 bool BlynkServer::connected() {
-  return Blynk.connected();
+  bool connected = false;
+  try {
+    return Blynk.connected();
+  }
+  catch (...) {
+    _eh->handle("bool BlynkServer::connected()");
+  }
+
+  return connected;
 }
 
 void BlynkServer::connect() {
-  Blynk.connect();
+  try {
+    Blynk.connect();
 
-  Serial.print("Blynk connected to ");
-  Serial.print(this->IP);
-  Serial.print(" on port ");
-  Serial.println(this->Port);
+    Serial.print("Blynk connected to ");
+    Serial.print(this->IP);
+    Serial.print(" on port ");
+    Serial.println(this->Port);
+  }
+  catch (...) {
+    _eh->handle("void BlynkServer::connect()");
+  }
 }
 
 void BlynkServer::disconnect() {
-  Blynk.disconnect();
+  try {
+    Blynk.disconnect();
+  }
+  catch (...) {
+    _eh->handle("void BlynkServer::disconnect()");
+  }
 }
 
 void BlynkServer::checkConnection() {

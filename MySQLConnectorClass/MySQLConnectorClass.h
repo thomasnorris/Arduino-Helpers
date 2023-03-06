@@ -11,6 +11,7 @@
 #include <MySQL_Connection.h>
 #include <MySQL_Cursor.h>
 #include <WString.h>
+#include "../ExceptionHandlerClass/ExceptionHandlerClass.h"
 
 class MySQLConn {
     public:

@@ -2,6 +2,10 @@
 
 // reference: https://randomnerdtutorials.com/esp8266-nodemcu-http-get-post-arduino/
 
+namespace {
+  ExceptionHandler* _eh = new ExceptionHandler();
+}
+
 GAClient::GAClient(String url, String auth_header, String auth_token) {
   this->URL = url;
   this->AuthHeader = auth_header;
@@ -9,26 +13,31 @@ GAClient::GAClient(String url, String auth_header, String auth_token) {
 }
 
 void GAClient::send(String command) {
-  WiFiClient client;
-  HTTPClient http;
+  try {
+    WiFiClient client;
+    HTTPClient http;
 
-  String full_url = this->URL + "/" + command;
-  full_url.replace(" ", "%20");
-  if (http.begin(client, full_url)) {
-    http.addHeader(this->AuthHeader, this->AuthToken);
+    String full_url = this->URL + "/" + command;
+    full_url.replace(" ", "%20");
+    if (http.begin(client, full_url)) {
+      http.addHeader(this->AuthHeader, this->AuthToken);
 
-    Serial.println("Sending " + full_url);
+      Serial.println("Sending " + full_url);
 
-    int httpCode = http.GET();
-    Serial.println(httpCode);
+      int httpCode = http.GET();
+      Serial.println(httpCode);
 
-    String payload = http.getString();
-    Serial.println(payload);
+      String payload = http.getString();
+      Serial.println(payload);
 
-    // free resources
-    http.end();
+      // free resources
+      http.end();
+    }
+    else {
+      throw "Could not begin request";
+    }
   }
-  else {
-    Serial.println("There was an error sending a request to the Google Assistant.");
+  catch (...) {
+    _eh->handle("void GAClient::send(String command)");
   }
 }

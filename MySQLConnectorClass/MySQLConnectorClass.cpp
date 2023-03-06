@@ -3,6 +3,7 @@
 namespace {
   WiFiClient _wifiClient;
   MySQL_Connection _conn((Client *)&_wifiClient);
+  ExceptionHandler* _eh = new ExceptionHandler();
 }
 
 // public
@@ -14,42 +15,53 @@ MySQLConn::MySQLConn(String url, String username, String password, int port) {
 }
 
 String MySQLConn::getSingleValue(String query) {
-  this->connect();
-
-  row_values *row = NULL;
-  MySQL_Cursor *cur_mem = new MySQL_Cursor(&_conn);
   String result = "NULL";
 
-  // execute
-  cur_mem->execute(query.c_str());
+  try {
+    this->connect();
 
-  // get columns, don't do anything with them
-  column_names *columns = cur_mem->get_columns();
+    row_values *row = NULL;
+    MySQL_Cursor *cur_mem = new MySQL_Cursor(&_conn);
 
-  // Read the single row
-  do {
-    row = cur_mem->get_next_row();
-    if (row != NULL) {
-      result = String(row->values[0]);
-    }
-  } while (row != NULL);
+    // execute
+    cur_mem->execute(query.c_str());
 
-  // free resources
-  delete cur_mem;
-  this->close();
+    // get columns, don't do anything with them
+    column_names *columns = cur_mem->get_columns();
+
+    // Read the single row
+    do {
+      row = cur_mem->get_next_row();
+      if (row != NULL) {
+        result = String(row->values[0]);
+      }
+    } while (row != NULL);
+
+    // free resources
+    delete cur_mem;
+    this->close();
+  }
+  catch (...) {
+    _eh->handle("String MySQLConn::getSingleValue(String query)");
+  }
 
   return result;
 }
 
 void MySQLConn::upsert(String query) {
-  this->connect();
+  try {
+    this->connect();
 
-  // send off, no return
-  MySQL_Cursor *cur_mem = new MySQL_Cursor(&_conn);
-  cur_mem->execute(query.c_str());
+    // send off, no return
+    MySQL_Cursor *cur_mem = new MySQL_Cursor(&_conn);
+    cur_mem->execute(query.c_str());
 
-  delete cur_mem;
-  this->close();
+    delete cur_mem;
+    this->close();
+  }
+  catch (...) {
+    _eh->handle("void MySQLConn::upsert(String query)");
+  }
 }
 
 // private

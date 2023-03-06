@@ -1,5 +1,5 @@
-#ifndef EXCEPTION_HANDLER_H_
-#define EXCEPTION_HANDLER_H_
+#ifndef EXCEPTION_eh_H_
+#define EXCEPTION_eh_H_
 
 #include <Arduino.h>
 

@@ -4,11 +4,12 @@ ExceptionHandler::ExceptionHandler() {
   // nothing
 }
 
+// wraps a function in a try/catch
 void ExceptionHandler::wrap(void (*func)(), String origin) {
   try {
     func();
   }
-  catch(...) {
+  catch (...) {
     this->handle(origin);
   }
 }

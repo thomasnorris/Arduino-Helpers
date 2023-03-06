@@ -9,6 +9,7 @@
 #include <ESP8266WiFi.h>
 #include "wl_definitions.h"
 #include "../LedClass/LedClass.h"
+#include "../ExceptionHandlerClass/ExceptionHandlerClass.h"
 
 class WifiClient {
   public:
@@ -21,7 +22,6 @@ class WifiClient {
   private:
     String SSID;
     String Password;
-    Led* LED;
 };
 
 #endif
