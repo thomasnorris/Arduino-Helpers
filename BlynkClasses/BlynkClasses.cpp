@@ -33,6 +33,8 @@ BlynkServer::BlynkServer(String ip_address, int port, String auth_token) {
   this->IP = ip_address;
   this->Port = port;
   this->AuthToken = auth_token;
+
+  this->notifySetEnabled();
 }
 
 void BlynkServer::configure() {
@@ -101,8 +103,23 @@ void BlynkServer::checkConnection() {
   }
 }
 
-void BlynkServer::notify(String message) {
-  Blynk.notify(message);
+void BlynkServer::notify(String message, bool priority) {
+  // only override if not disabled or specifically set
+  if (this->NotifyEnabled || priority) {
+    Blynk.notify(message);
+  }
+}
+
+void BlynkServer::notifySetEnabled(bool enabled) {
+  this->NotifyEnabled = enabled;
+}
+
+bool BlynkServer::notifyGetEnabled() {
+  return this->NotifyEnabled;
+}
+
+void BlynkServer::notifyToggleEnabled() {
+  this->NotifyEnabled = !this->NotifyEnabled;
 }
 
 // VirtualPin
@@ -229,11 +246,19 @@ void VirtualTerminal::init(String string) {
   this->println(string, "[INIT]");
 }
 
-void VirtualTerminal::print(String message, String prefix) {
+void VirtualTerminal::help(String string) {
+  this->println(string, "[HELP]", false);
+}
+
+void VirtualTerminal::emptyln() {
+  this->println("", "", false);
+}
+
+void VirtualTerminal::print(String message, String prefix, bool print_time) {
   if (this->Value != message) {
     this->Value = message;
 
-    message = this->buildMessage(message, prefix);
+    message = this->buildMessage(message, prefix, print_time);
 
     WidgetTerminal term(this->Pin);
     term.print(message);
@@ -241,11 +266,11 @@ void VirtualTerminal::print(String message, String prefix) {
   }
 }
 
-void VirtualTerminal::println(String message, String prefix) {
+void VirtualTerminal::println(String message, String prefix, bool print_time) {
   if (this->Value != message) {
     this->Value = message;
 
-    message = this->buildMessage(message, prefix);
+    message = this->buildMessage(message, prefix, print_time);
 
     WidgetTerminal term(this->Pin);
     term.println(message);
@@ -263,9 +288,9 @@ void VirtualTerminal::clear() {
 }
 
 // private
-String VirtualTerminal::buildMessage(String message, String prefix) {
+String VirtualTerminal::buildMessage(String message, String prefix, bool with_time) {
   String time = "";
-  if (this->MyTimeHelpers != nullptr) {
+  if (this->MyTimeHelpers != nullptr && with_time) {
     time = this->MyTimeHelpers->getCurrentLocalTime12hr() + ": ";
   }
 

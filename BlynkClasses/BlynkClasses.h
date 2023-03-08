@@ -21,11 +21,15 @@ class BlynkServer {
     void disconnect();
     void run();
     void checkConnection();
-    void notify(String message);
+    void notify(String message, bool priority = false);
+    void notifySetEnabled(bool enabled = true);
+    bool notifyGetEnabled();
+    void notifyToggleEnabled();
   private:
     String IP;
     String AuthToken;
     int Port;
+    bool NotifyEnabled;
 };
 
 class VirtualPin {
@@ -68,14 +72,16 @@ class VirtualTerminal {
     void error(String string);
     void critical(String string);
     void init(String string);
-    void print(String message, String prefix = "");
-    void println(String message, String prefix = "");
+    void help(String string);
+    void emptyln();
+    void print(String message = "", String prefix = "", bool with_time = true);
+    void println(String message = "", String prefix = "", bool with_time = true);
     void clear();
   private:
     int Pin;
     String Value;
-    TimeHelpers* MyTimeHelpers = nullptr;
-    String buildMessage(String message, String prefix = "");
+    TimeHelpers* MyTimeHelpers;
+    String buildMessage(String message, String prefix = "", bool with_time = true);
 };
 
 #endif
