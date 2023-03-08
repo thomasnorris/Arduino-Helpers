@@ -4,9 +4,11 @@ namespace {
   const char DAYS_OF_THE_WEEK[7][12] = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
   // set NTPClient to EST time zone (UTC -5 Hours)
-  long _utc_time_seconds = -5 * 3600;
+  const long UTC_OFFSET_SECONDS = -5 * 3600;
+  const String NTP_SERVER = "north-america.pool.ntp.org";
+
   WiFiUDP _ntpUDP;
-  NTPClient _timeClient(_ntpUDP, "north-america.pool.ntp.org", _utc_time_seconds);
+  NTPClient _timeClient(_ntpUDP, NTP_SERVER.c_str(), UTC_OFFSET_SECONDS);
 }
 
 // public
@@ -20,6 +22,7 @@ void TimeHelpers::begin() {
 
 void TimeHelpers::update() {
   _timeClient.update();
+  this->setClockTime();
 }
 
 String TimeHelpers::getCurrentLocalDateTime24hr() {
@@ -59,7 +62,7 @@ String TimeHelpers::prettyFormatS(int seconds) {
 
   // days remaining?
   if (rem_days != 0) {
-    return String(rem_days) + "d" + String(rem_hours) + "h " + String(rem_minutes) + "m " + String(rem_seconds) + "s";
+    return String(rem_days) + "d " + String(rem_hours) + "h " + String(rem_minutes) + "m " + String(rem_seconds) + "s";
   }
 
   // hours remaining?
@@ -99,6 +102,10 @@ String TimeHelpers::getCurrentLocalTime12hr() {
   ss >> hr;
 
   // convert into am/pm
+  if (hr == 12) {
+    am_pm = "PM";
+  }
+
   if (hr == 0) {
     hr = 12;
     am_pm = "AM";
@@ -125,4 +132,19 @@ String TimeHelpers::getCurrentLocalTime12hr() {
 String TimeHelpers::getFormattedTime() {
   this->update();
   return _timeClient.getFormattedTime();
+}
+
+// set the clock time to match the NTP time
+// see https://arduino.stackexchange.com/questions/88879/set-time-on-esp8266
+// see https://github.com/Martin-Laclaustra/CronAlarms/blob/master/examples/CronAlarms_example/CronAlarms_example.ino#L44
+void TimeHelpers::setClockTime() {
+  // get the ray epoch time
+  time_t raw_time = _timeClient.getEpochTime();
+
+  // get the local time from that epoch
+  struct tm* tm_info = localtime(&raw_time);
+
+  // turn it into a timeval and then use settimeofday to set it
+  timeval tv = { mktime(tm_info), 0 };
+  settimeofday(&tv, nullptr);
 }

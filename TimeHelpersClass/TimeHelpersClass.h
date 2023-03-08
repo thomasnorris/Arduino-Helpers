@@ -26,6 +26,7 @@ class TimeHelpers {
         String getCurrentLocalTime12hr();
     private:
         String getFormattedTime();
+        void setClockTime();
 };
 
 #endif
