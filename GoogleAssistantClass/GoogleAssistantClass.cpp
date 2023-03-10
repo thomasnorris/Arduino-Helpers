@@ -24,14 +24,16 @@ void GAClient::send(String command) {
 
       Serial.println("Sending " + full_url);
 
-      int httpCode = http.GET();
-      Serial.println(httpCode);
-
+      int http_code = http.GET();
       String payload = http.getString();
-      Serial.println(payload);
 
       // free resources
       http.end();
+
+      // all is good
+      if (http_code != HTTP_CODE_OK) {
+        throw "ErrorCode: " + String(http_code) + ", Payload: " + payload + ", URL: " + full_url;
+      }
     }
     else {
       throw "Could not begin request";
