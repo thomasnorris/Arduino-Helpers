@@ -27,6 +27,8 @@ class TimeHelpers {
     private:
         String getFormattedTime();
         void setClockTime();
+        void checkDST();
+        struct tm* getLocalTimeTM();
 };
 
 #endif
