@@ -22,11 +22,11 @@ void Gpio::write(byte val) {
 }
 
 void Gpio::on() {
-  this->write(1);
+  this->write(HIGH);
 }
 
 void Gpio::off() {
-  this->write(0);
+  this->write(LOW);
 }
 
 bool Gpio::isLow() {
