@@ -21,6 +21,14 @@ void Gpio::write(byte val) {
   digitalWrite(this->Pin, val);
 }
 
+void Gpio::on() {
+  this->write(1);
+}
+
+void Gpio::off() {
+  this->write(0);
+}
+
 bool Gpio::isLow() {
   return this->read() == LOW;
 }

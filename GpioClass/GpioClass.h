@@ -8,6 +8,8 @@ class Gpio {
     Gpio(byte pin, byte pin_mode);
     int read();
     void write(byte val);
+    void on();
+    void off();
     bool isLow();
     bool isHigh();
     byte getPin();
